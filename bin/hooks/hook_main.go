@@ -1,14 +1,19 @@
 package hook_main
-import "fmt"
-import "hook"
+import (
+    "fmt"
+    "hook"
+)
 
 struct HookMain {
-    Hook
-    Execer
+    hook.Hook
+    hook.Execer
+    data map
 }
 
-func (h HookMain) Execer {
+func (h HookMain) Exec {
     fmt.Println("main hook goes here")
+    fmt.Println("It is for %s", h.Name)
+    fmt.Println("data will be %s", h.data)
 }
 
-func Exec:
+

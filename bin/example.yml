@@ -1,0 +1,13 @@
+__METADATA__:
+  author: Nick Palenchar
+  description: echo hello, print the current directory
+
+__CONFIG__:
+    vars:
+    - hello: world
+
+__MAIN__:
+  IN ROOT:
+  - echo hello
+  - pwd
+

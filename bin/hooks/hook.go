@@ -8,7 +8,7 @@ type Hook struct {
 }
 
 type Execer interface {
-    Main()
+    Exec()
 }
 type PreHook interface {
     PreHook()

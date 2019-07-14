@@ -1,0 +1,7 @@
+Structs will be the cornerstorne of defining the yml structure
+
+NEXT
+* Set the working directory, run the commands
+* set logic for the difference between string and map (for "=": "echo" values)
+
+* abstract into hooks (but RENAME to blocks)
