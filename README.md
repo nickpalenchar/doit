@@ -23,6 +23,8 @@ __MAIN__:
     - git commit -m "$(date)"
 ```
 
+Run `doit` in the same directory `doit.yml` is saved
+
 # To do
 - [ ] Notating commands where non-0 should not exit the whole program
 - [ ] running commands (directives?) in parallel

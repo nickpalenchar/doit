@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -9,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/nickpalenchar/doit/cmd/directives"
+	"github.com/nickpalenchar/doit/cmd/print"
 	"gopkg.in/yaml.v2"
 )
 
@@ -19,15 +19,9 @@ type Config struct {
 var verbose bool
 
 func init() {
-	flag.BoolVar(&verbose, "v", false, "Enable verbose logging")
-	flag.Parse()
-	debugLog("verbose logging activated")
-}
-
-func debugLog(format string, args ...interface{}) {
-	if verbose {
-		log.Printf("[DEBUG] "+format, args...)
-	}
+	// flag.BoolVar(&verbose, "v", false, "Enable verbose logging")
+	// flag.Parse()
+	print.Debug("verbose logging activated")
 }
 
 func stripFirstWord(input string) string {
@@ -43,7 +37,7 @@ func stripFirstWord(input string) string {
 func executeDirective(directive string, commands []string) {
 	if strings.HasPrefix(directive, "IN") {
 		directory := stripFirstWord(directive)
-		debugLog(fmt.Sprintf("Starting commands in %s", directory))
+		print.Debug(fmt.Sprintf("Starting commands in %s", directory))
 		directives.In(directory, commands)
 	}
 }
@@ -81,7 +75,7 @@ func findYAMLFile() (string, error) {
 
 func main() {
 	yamlFile, err := findYAMLFile()
-	debugLog(fmt.Sprintf("Loaded yaml file: %s", yamlFile))
+	print.Debug(fmt.Sprintf("Loaded yaml file: %s", yamlFile))
 	if err != nil {
 		log.Fatal(err)
 	}
