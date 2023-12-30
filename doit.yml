@@ -1,4 +1,6 @@
 
 __MAIN__:
-  IN ./example:
+  IN .:
     - echo HELLO
+    - pwd
+    - env
