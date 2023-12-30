@@ -1,0 +1,14 @@
+__META__:
+    author: Nick Palenchar
+    description: npm install everywhere there is a package.json
+
+__ENVFILE__:
+  file: .env
+
+__ENV__:
+  FOO: bar
+
+__MAIN__:
+    IN ./** CONTAINING package.json:
+        - ?: rm -rf node_modules
+        - npm install 

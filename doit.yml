@@ -1,6 +1,8 @@
+__META__:
+  description: |
+    This script builds do it and adds it to your local path.
+    That's right. `doit` installs `doit`
 
 __MAIN__:
-  IN .:
-    - echo HELLO
-    - pwd
-    - env
+  IN ./cmd:
+    - ../build-local.sh
