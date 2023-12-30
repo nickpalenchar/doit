@@ -1,8 +1,0 @@
-__METADATA__:
-    author: Nick Palenchar
-    description: npm install everywhere there is a package.json
-
-__MAIN__:
-    IN ./** CONTAINING package.json:
-        - ?: rm -rf node_modules
-        - npm install 

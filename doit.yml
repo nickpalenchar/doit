@@ -1,0 +1,4 @@
+
+__MAIN__:
+  IN ./example:
+    - echo HELLO
