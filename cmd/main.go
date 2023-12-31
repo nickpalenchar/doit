@@ -13,7 +13,7 @@ import (
 )
 
 type Config struct {
-	Main map[string][]string `yaml:"__MAIN__"`
+	Main map[string]interface{} `yaml:"__MAIN__"`
 }
 
 var verbose bool
@@ -34,7 +34,7 @@ func stripFirstWord(input string) string {
 	return result
 }
 
-func executeDirective(directive string, commands []string) {
+func executeDirective(directive string, commands interface{}) {
 	if strings.HasPrefix(directive, "IN") {
 		directory := stripFirstWord(directive)
 		print.Debug(fmt.Sprintf("Starting commands in %s", directory))

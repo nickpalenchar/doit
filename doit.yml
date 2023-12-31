@@ -6,3 +6,4 @@ __META__:
 __MAIN__:
   IN ./cmd:
     - ../build-local.sh
+    - echo done

@@ -2,8 +2,8 @@ package directives
 
 import (
 	"bytes"
+	"fmt"
 	"io"
-	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -36,11 +36,9 @@ func (pw *PrefixWriter) Write(p []byte) (n int, err error) {
 	return len(p), nil
 }
 
-// In executes each shell command in the specified directory.
-func In(directory string, commands []string) error {
-
+func In(directory string, commands interface{}) error {
 	if trimmed := strings.TrimSpace(directory); trimmed == "" {
-		log.Fatalf("[ERROR] Directive IN must have a path (e.g. `IN .`; `IN /home`)")
+		print.Error("Directive IN must have a path (e.g. `IN .`; `IN /home`)")
 	}
 
 	shell := os.Getenv("SHELL")
@@ -49,18 +47,46 @@ func In(directory string, commands []string) error {
 	}
 
 	stdOut := &PrefixWriter{Prefix: ">> ", Writer: os.Stdout}
+	stdErr := &PrefixWriter{Prefix: "!> ", Writer: os.Stderr}
 
-	// Iterate over each command and execute it
-	for _, cmdStr := range commands {
-		cmd := exec.Command(shell, "-c", cmdStr)
-		cmd.Dir = directory
-		cmd.Stdout = stdOut
-		cmd.Stderr = os.Stderr
-		print.Info("> " + cmdStr)
-		if err := cmd.Run(); err != nil {
-			log.Fatalf("[ERROR] %s", err)
-			return err
+	switch v := commands.(type) {
+	case []interface{}:
+		// Iterate over each command and execute it
+		for _, cmdArg := range v {
+			var cmdStr string
+			var ignoreFailure bool
+
+			switch cmd := cmdArg.(type) {
+			case string:
+				cmdStr = cmd
+			case map[interface{}]interface{}:
+				// Assume the map has a single key and value
+				for k, v := range cmd {
+					cmdStr = fmt.Sprintf("%v", v)
+					if keyStr, ok := k.(string); ok && keyStr == "?" {
+						ignoreFailure = true
+					}
+					break
+				}
+			default:
+				print.Error("Invalid command type. Must be a string or a map with a single key.")
+			}
+
+			cmd := exec.Command(shell, "-c", cmdStr)
+			cmd.Dir = directory
+			cmd.Stdout = stdOut
+			cmd.Stderr = stdErr
+			print.Info("> " + cmdStr)
+			if err := cmd.Run(); err != nil && !ignoreFailure {
+				print.Error("check above error output (begins with !>)")
+				print.Error(err.Error())
+				print.Error("halting doit plan.")
+				os.Exit(1)
+			}
 		}
+	default:
+		print.Error("Invalid command type. Must be a string or valid key/value pair.")
 	}
+
 	return nil
 }
