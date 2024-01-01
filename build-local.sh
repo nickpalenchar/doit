@@ -5,8 +5,10 @@ if ! command -v go &> /dev/null; then
     exit 1
 fi
 
+VERSION="$(cat ../version.txt)"
 
-go build -o doit
+echo "Building version $VERSION"
+go build -ldflags "-X main.Version=${VERSION}" -o doit
 
 if [ $? -ne 0 ]; then
     echo "Build failed. Please fix any errors and try again."

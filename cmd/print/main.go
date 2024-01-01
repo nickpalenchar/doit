@@ -1,7 +1,6 @@
 package print
 
 import (
-	"flag"
 	"log"
 	"os"
 )
@@ -9,15 +8,17 @@ import (
 var (
 	stdoutPrinter *log.Logger
 	stderrPrinter *log.Logger
-	verboseOutput bool
 )
+var verboseOutput = false
 
 func init() {
 	stdoutPrinter = log.New(os.Stdout, "", 0)
 	stderrPrinter = log.New(os.Stderr, "", 0)
-	flag.BoolVar(&verboseOutput, "v", false, "Enable verbose logging")
-	flag.Parse()
 
+}
+
+func SetVerboseOutput(useVerboseOutput bool) {
+	verboseOutput = useVerboseOutput
 }
 
 func Debug(msg string) {

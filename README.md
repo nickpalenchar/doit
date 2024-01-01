@@ -2,6 +2,20 @@
 
 Write a yaml file and run commands in different directories.
 
+# Install
+
+## Build From Source
+
+You will need `go`
+```
+# clone the repository, move to the root of the repository
+git clone git@github.com:nickpalenchar/doit.git && cd doit
+
+# when the program is ran from the repo, it builds and
+# installs itself
+go run cmd/main.go
+```
+
 ```yaml
 // doit.yml
 

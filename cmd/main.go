@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -12,16 +13,36 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+var Version string
+var (
+	showVersion   bool
+	verboseOutput bool
+)
+
+func getVersion() string {
+	if Version == "" {
+		Version = "0.0.0-dev"
+	}
+	return Version
+}
+
 type Config struct {
 	Main map[string]interface{} `yaml:"__MAIN__"`
 }
 
-var verbose bool
-
 func init() {
-	// flag.BoolVar(&verbose, "v", false, "Enable verbose logging")
-	// flag.Parse()
+	flag.BoolVar(&showVersion, "version", false, "Print version and exit")
+	flag.BoolVar(&verboseOutput, "v", false, "Use verbose logging")
+	flag.Parse()
+
+	if showVersion {
+		fmt.Printf("Version: %s\n", getVersion())
+		os.Exit(0)
+	}
+	print.SetVerboseOutput(verboseOutput)
+
 	print.Debug("verbose logging activated")
+
 }
 
 func stripFirstWord(input string) string {
