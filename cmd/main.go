@@ -27,7 +27,7 @@ func getVersion() string {
 }
 
 type Config struct {
-	Main map[string]interface{} `yaml:"__MAIN__"`
+	Main yaml.MapSlice `yaml:"__MAIN__"`
 }
 
 func init() {
@@ -46,12 +46,8 @@ func init() {
 }
 
 func stripFirstWord(input string) string {
-	// Define a regular expression to match the first word followed by spaces
 	re := regexp.MustCompile(`^[^\s]+\s*`)
-
-	// Replace the matched part with an empty string
 	result := re.ReplaceAllString(input, "")
-
 	return result
 }
 
@@ -76,8 +72,12 @@ func runCommandsFromYAML(yamlFile string) {
 		log.Fatalf("Error unmarshalling YAML: %v", err)
 	}
 
-	for directive, args := range config.Main {
-		executeDirective(directive, args)
+	for _, item := range config.Main {
+		if directive, ok := item.Key.(string); ok {
+			executeDirective(directive, item.Value)
+		} else {
+			log.Fatalf("Directive '%v' is invalid.", directive)
+		}
 	}
 }
 
